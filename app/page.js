@@ -86,8 +86,8 @@ export default function JobBoard() {
     try {
       // 1. Start run
       const runData = await apifyPost(
-        `/v2/acts/curious_coder~linkedin-jobs-scraper/runs?token=${token}`,
-        { urls: [{ url: linkedinUrl }], count: parseInt(maxResults) || 50, proxy: { useApifyProxy: true } }
+        `/v2/acts/bebity~linkedin-jobs-scraper/runs?token=${token}`,
+        { startUrls: [{ url: linkedinUrl }], maxItems: parseInt(maxResults) || 50, proxy: { useApifyProxy: true } }
       );
 
       const runId = runData.data?.id;
