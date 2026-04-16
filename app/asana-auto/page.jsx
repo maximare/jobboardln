@@ -71,27 +71,7 @@ function parseTask(t) {
 // ── KP Logo SVG ───────────────────────────────────────────────────────────────
 function KPLogo({ height = 36 }) {
   return (
-    <svg height={height} viewBox="0 0 220 80" xmlns="http://www.w3.org/2000/svg" style={{ display: "block" }}>
-      <text x="0" y="38" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="42" letterSpacing="-1">
-        <tspan fill="#E8000F">k</tspan>
-        <tspan fill="#FFD600">u</tspan>
-        <tspan fill="#00A651">p</tspan>
-        <tspan fill="#003DA5">u</tspan>
-        <tspan fill="#E8000F">j</tspan>
-        <tspan fill="#FFD600">e</tspan>
-        <tspan fill="#00A651">m</tspan>
-      </text>
-      <text x="0" y="76" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontSize="42" letterSpacing="-1">
-        <tspan fill="#003DA5">p</tspan>
-        <tspan fill="#003DA5">r</tspan>
-        <tspan fill="#003DA5">o</tspan>
-        <tspan fill="#003DA5">d</tspan>
-        <tspan fill="#003DA5">a</tspan>
-        <tspan fill="#003DA5">j</tspan>
-        <tspan fill="#003DA5">e</tspan>
-        <tspan fill="#003DA5">m</tspan>
-      </text>
-    </svg>
+    <img src="/kp-logo.png" alt="KupujemProdajem" style={{ height, display: "block", objectFit: "contain" }} />
   );
 }
 
@@ -197,13 +177,13 @@ function BubbleView({ tasks }) {
         scales: {
           x: {
             min: 0.2, max: 3.8,
-            ticks: { color: KP.textMuted, font: { size: 12, family: "'Arial', sans-serif", weight: "bold" }, callback: v => ({ 1: "Mali", 2: "Srednji", 3: "Veliki" }[Math.round(v)] || ""), stepSize: 1 },
+            ticks: { color: KP.textMuted, font: { size: 12, family: "'PT Sans', sans-serif", weight: "bold" }, callback: v => ({ 1: "Mali", 2: "Srednji", 3: "Veliki" }[Math.round(v)] || ""), stepSize: 1 },
             grid: { color: "rgba(0,61,165,0.06)" },
             title: { display: true, text: "Effort (trajanje)", color: KP.textSub, font: { size: 12 } },
           },
           y: {
             min: 0.2, max: 4.8,
-            ticks: { color: KP.textMuted, font: { size: 12, family: "'Arial', sans-serif", weight: "bold" }, callback: v => ({ 1: "Implementacija", 2: "Nice to have", 3: "Srednji prioritet", 4: "Visok prioritet" }[Math.round(v)] || ""), stepSize: 1 },
+            ticks: { color: KP.textMuted, font: { size: 12, family: "'PT Sans', sans-serif", weight: "bold" }, callback: v => ({ 1: "Implementacija", 2: "Nice to have", 3: "Srednji prioritet", 4: "Visok prioritet" }[Math.round(v)] || ""), stepSize: 1 },
             grid: { color: "rgba(0,61,165,0.06)" },
           },
         },
@@ -618,7 +598,7 @@ export default function AutoPage() {
   ) : [];
 
   return (
-    <div style={{ minHeight: "100vh", background: KP.bg, fontFamily: "'Arial', sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: KP.bg, fontFamily: "'PT Sans', sans-serif" }}>
       {/* Header */}
       <div style={{ background: KP.surface, borderBottom: `2px solid ${KP.blue}`, padding: "0 28px" }}>
         <div style={{ maxWidth: 960, margin: "0 auto", display: "flex", alignItems: "center", gap: 20, height: 64 }}>
