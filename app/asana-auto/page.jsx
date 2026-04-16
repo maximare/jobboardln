@@ -570,7 +570,9 @@ export default function AutoPage() {
   const [error,   setError]   = useState("");
   const [view,    setView]    = useState("bubble");
   const [chartJs, setChartJs] = useState(false);
+  const [lastSync, setLastSync] = useState(null);
 
+  // Učitaj Chart.js
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.Chart) { setChartJs(true); return; }
@@ -580,15 +582,37 @@ export default function AutoPage() {
     document.head.appendChild(s);
   }, []);
 
-  const onConnect = async (tok) => {
+  // Vrati token iz sessionStorage pri refresh-u
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = sessionStorage.getItem("kp_asana_token");
+    if (saved) fetchTasks(saved);
+  }, []);
+
+  const fetchTasks = async (tok) => {
     setToken(tok); setLoading(true); setError("");
     try {
       const raw = await asanaFetch(
         `/tasks?project=${PROJECT_GID}&opt_fields=name,completed,memberships.section.name,custom_fields&limit=100`, tok
       );
       setTasks(raw.filter(t => !t.completed).map(parseTask));
+      setLastSync(new Date());
     } catch (e) { setError(e.message); }
     finally { setLoading(false); }
+  };
+
+  const onConnect = (tok) => {
+    sessionStorage.setItem("kp_asana_token", tok);
+    fetchTasks(tok);
+  };
+
+  const onLogout = () => {
+    sessionStorage.removeItem("kp_asana_token");
+    setToken(null); setTasks(null);
+  };
+
+  const onRefresh = () => {
+    if (token) fetchTasks(token);
   };
 
   if (!token) return <TokenScreen onConnect={onConnect} />;
@@ -618,9 +642,20 @@ export default function AutoPage() {
             </div>
           )}
 
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+            {lastSync && (
+              <span style={{ fontSize: 11, color: KP.textMuted }}>
+                Sinhronizovano {lastSync.toLocaleTimeString("sr-RS", { hour: "2-digit", minute: "2-digit" })}
+              </span>
+            )}
             {tasks && <span style={{ fontSize: 12, color: KP.textSub }}>{tasks.length} projekata</span>}
-            <button onClick={() => { setToken(null); setTasks(null); }}
+            <button onClick={onRefresh} disabled={loading}
+              style={{ padding: "5px 12px", fontSize: 11, borderRadius: 6,
+                border: `1.5px solid ${KP.blue}`, background: KP.blueLight,
+                color: KP.blue, cursor: loading ? "default" : "pointer", fontWeight: 700 }}>
+              {loading ? "..." : "↻ Osveži"}
+            </button>
+            <button onClick={onLogout}
               style={{ padding: "5px 12px", fontSize: 11, borderRadius: 6,
                 border: `1px solid ${KP.border}`, background: KP.bg,
                 color: KP.textSub, cursor: "pointer" }}>
